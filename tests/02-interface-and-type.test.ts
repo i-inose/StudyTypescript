@@ -12,10 +12,14 @@ import type { ChapterResult, TestResult } from "./test-runner";
 // そのインターフェースを使って変数 user を宣言してください
 // ============================================================
 // ここに回答 ↓
-
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 // interface User { ... } を定義してください
 
-const q1Answer: any = { id: 1, name: "田中", email: "tanaka@example.com" };
+const q1Answer: User = { id: 1, name: "田中", email: "tanaka@example.com" };
 
 // ============================================================
 // Q2: オプショナルプロパティ（?）を使おう
@@ -24,10 +28,13 @@ const q1Answer: any = { id: 1, name: "田中", email: "tanaka@example.com" };
 // age を省略した { name: "太郎" } というオブジェクトを作ってください
 // ============================================================
 // ここに回答 ↓
-
+interface Profile {
+  name: string;
+  age?: number;
+}
 // interface Profile { ... } を定義してください
 
-const q2Answer: any = { name: "太郎" };
+const q2Answer: Profile = { name: "太郎" };
 
 // ============================================================
 // Q3: readonly プロパティを使おう
@@ -36,10 +43,13 @@ const q2Answer: any = { name: "太郎" };
 // { id: 100, name: "ペン" } で作成してください
 // ============================================================
 // ここに回答 ↓
-
+interface Item {
+  readonly id: number;
+  name: string;
+}
 // interface Item { ... } を定義してください
 
-const q3Answer: any = { id: 100, name: "ペン" };
+const q3Answer: Item = { id: 100, name: "ペン" };
 
 // ============================================================
 // Q4: type エイリアスでユニオン型に名前をつけよう
@@ -47,9 +57,9 @@ const q3Answer: any = { id: 100, name: "ペン" };
 // Size 型の変数に "medium" を代入してください
 // ============================================================
 // ここに回答 ↓
-type Size = any; // ここを修正
+type Size = "small" | "medium" | "large"; // ここを修正
 
-const q4Answer: Size = "medium" as any;
+const q4Answer: Size = "medium";
 
 // ============================================================
 // Q5: interface を extends で拡張しよう
@@ -63,9 +73,13 @@ interface BaseAnimal {
   name: string;
 }
 
+interface Dog extends BaseAnimal {
+  breed: string;
+}
+
 // interface Dog extends ... を定義してください
 
-const q5Answer: any = { name: "ポチ", breed: "柴犬" };
+const q5Answer: Dog = { name: "ポチ", breed: "柴犬" };
 
 // ============================================================
 // Q6: 交差型（&）で型を合成しよう
@@ -75,11 +89,11 @@ const q5Answer: any = { name: "ポチ", breed: "柴犬" };
 // ============================================================
 // ここに回答 ↓
 
-type WithId = any;     // ここを修正
-type WithName = any;   // ここを修正
-type Identified = any; // ここを修正 (& を使う)
+type WithId = { id: number }; // ここを修正
+type WithName = { name: string }; // ここを修正
+type Identified = WithId & WithName; // ここを修正 (& を使う)
 
-const q6Answer: any = { id: 1, name: "テスト" };
+const q6Answer: Identified = { id: 1, name: "テスト" };
 
 // ============================================================
 // Q7: インデックスシグネチャを使おう
@@ -87,10 +101,12 @@ const q6Answer: any = { id: 1, name: "テスト" };
 // { math: 90, english: 85, science: 78 } で変数を作ってください
 // ============================================================
 // ここに回答 ↓
-
+interface ScoreMap {
+  [name: string]: number;
+}
 // interface ScoreMap または type ScoreMap を定義してください
 
-const q7Answer: any = { math: 90, english: 85, science: 78 };
+const q7Answer: ScoreMap = { math: 90, english: 85, science: 78 };
 
 // ============================================================
 // Q8: 複数の interface を継承しよう
@@ -99,15 +115,29 @@ const q7Answer: any = { math: 90, english: 85, science: 78 };
 // Document に title: string も追加してください
 // ============================================================
 // ここに回答 ↓
+interface Printable {
+  print(): string;
+}
 
+interface Saveable {
+  save(): boolean;
+}
+
+interface Document extends Printable, Saveable {
+  title: string;
+}
 // interface Printable { ... }
 // interface Saveable { ... }
 // interface Document extends Printable, Saveable { ... }
 
-const q8Answer: any = {
+const q8Answer: Document = {
   title: "レポート",
-  print() { return this.title; },
-  save() { return true; },
+  print() {
+    return this.title;
+  },
+  save() {
+    return true;
+  },
 };
 
 // ============================================================
@@ -117,9 +147,9 @@ const q8Answer: any = {
 // ============================================================
 // ここに回答 ↓
 
-type NameAndAge = any; // ここを修正
+type NameAndAge = [string, number]; // ここを修正
 
-const q9Answer: any = ["田中", 25];
+const q9Answer: NameAndAge = ["田中", 25];
 
 // ============================================================
 // Q10: 型エイリアスでオブジェクト型を定義しよう（interface と同等）
@@ -128,9 +158,12 @@ const q9Answer: any = ["田中", 25];
 // ============================================================
 // ここに回答 ↓
 
-type Point = any; // ここを修正
+type Point = {
+  x: number;
+  y: number;
+}; // ここを修正
 
-const q10Answer: any = { x: 10, y: 20 };
+const q10Answer: Point = { x: 10, y: 20 };
 
 // ============================================================
 // テスト実行（この部分は変更しないでください）
@@ -138,64 +171,93 @@ const q10Answer: any = { x: 10, y: 20 };
 function runChapter02Tests(): ChapterResult {
   const results: TestResult[] = [];
 
-  results.push(runTest(1, "interface でオブジェクトの型を定義", () => {
-    assert.deepEqual(q1Answer, { id: 1, name: "田中", email: "tanaka@example.com" });
-    assert.typeOf(q1Answer.id, "number");
-    assert.typeOf(q1Answer.name, "string");
-    assert.typeOf(q1Answer.email, "string");
-  }));
+  results.push(
+    runTest(1, "interface でオブジェクトの型を定義", () => {
+      assert.deepEqual(q1Answer, {
+        id: 1,
+        name: "田中",
+        email: "tanaka@example.com",
+      });
+      assert.typeOf(q1Answer.id, "number");
+      assert.typeOf(q1Answer.name, "string");
+      assert.typeOf(q1Answer.email, "string");
+    }),
+  );
 
-  results.push(runTest(2, "オプショナルプロパティ（?）", () => {
-    assert.equal(q2Answer.name, "太郎");
-    assert.equal(q2Answer.age, undefined);
-  }));
+  results.push(
+    runTest(2, "オプショナルプロパティ（?）", () => {
+      assert.equal(q2Answer.name, "太郎");
+      assert.equal(q2Answer.age, undefined);
+    }),
+  );
 
-  results.push(runTest(3, "readonly プロパティ", () => {
-    assert.equal(q3Answer.id, 100);
-    assert.equal(q3Answer.name, "ペン");
-  }));
+  results.push(
+    runTest(3, "readonly プロパティ", () => {
+      assert.equal(q3Answer.id, 100);
+      assert.equal(q3Answer.name, "ペン");
+    }),
+  );
 
-  results.push(runTest(4, "type エイリアスでユニオン型", () => {
-    assert.equal(q4Answer, "medium");
-    // Size 型が正しく定義されていれば "medium" を受け入れる
-  }));
+  results.push(
+    runTest(4, "type エイリアスでユニオン型", () => {
+      assert.equal(q4Answer, "medium");
+      // Size 型が正しく定義されていれば "medium" を受け入れる
+    }),
+  );
 
-  results.push(runTest(5, "interface の extends による拡張", () => {
-    assert.equal(q5Answer.name, "ポチ");
-    assert.equal(q5Answer.breed, "柴犬");
-  }));
+  results.push(
+    runTest(5, "interface の extends による拡張", () => {
+      assert.equal(q5Answer.name, "ポチ");
+      assert.equal(q5Answer.breed, "柴犬");
+    }),
+  );
 
-  results.push(runTest(6, "交差型（&）で型を合成", () => {
-    assert.equal(q6Answer.id, 1);
-    assert.equal(q6Answer.name, "テスト");
-  }));
+  results.push(
+    runTest(6, "交差型（&）で型を合成", () => {
+      assert.equal(q6Answer.id, 1);
+      assert.equal(q6Answer.name, "テスト");
+    }),
+  );
 
-  results.push(runTest(7, "インデックスシグネチャ", () => {
-    assert.equal(q7Answer.math, 90);
-    assert.equal(q7Answer.english, 85);
-    assert.equal(q7Answer.science, 78);
-  }));
+  results.push(
+    runTest(7, "インデックスシグネチャ", () => {
+      assert.equal(q7Answer.math, 90);
+      assert.equal(q7Answer.english, 85);
+      assert.equal(q7Answer.science, 78);
+    }),
+  );
 
-  results.push(runTest(8, "複数 interface の継承", () => {
-    assert.equal(q8Answer.title, "レポート");
-    assert.equal(q8Answer.print(), "レポート");
-    assert.equal(q8Answer.save(), true);
-  }));
+  results.push(
+    runTest(8, "複数 interface の継承", () => {
+      assert.equal(q8Answer.title, "レポート");
+      assert.equal(q8Answer.print(), "レポート");
+      assert.equal(q8Answer.save(), true);
+    }),
+  );
 
-  results.push(runTest(9, "type でタプル型に名前をつける", () => {
-    assert.deepEqual(q9Answer, ["田中", 25]);
-    assert.typeOf(q9Answer[0], "string");
-    assert.typeOf(q9Answer[1], "number");
-  }));
+  results.push(
+    runTest(9, "type でタプル型に名前をつける", () => {
+      assert.deepEqual(q9Answer, ["田中", 25]);
+      assert.typeOf(q9Answer[0], "string");
+      assert.typeOf(q9Answer[1], "number");
+    }),
+  );
 
-  results.push(runTest(10, "type でオブジェクト型を定義", () => {
-    assert.deepEqual(q10Answer, { x: 10, y: 20 });
-    assert.typeOf(q10Answer.x, "number");
-    assert.typeOf(q10Answer.y, "number");
-  }));
+  results.push(
+    runTest(10, "type でオブジェクト型を定義", () => {
+      assert.deepEqual(q10Answer, { x: 10, y: 20 });
+      assert.typeOf(q10Answer.x, "number");
+      assert.typeOf(q10Answer.y, "number");
+    }),
+  );
 
   const passed = results.filter((r) => r.passed).length;
-  return { chapter: "02章: インターフェースと型エイリアス", results, passed, total: results.length };
+  return {
+    chapter: "02章: インターフェースと型エイリアス",
+    results,
+    passed,
+    total: results.length,
+  };
 }
 
 export { runChapter02Tests };
