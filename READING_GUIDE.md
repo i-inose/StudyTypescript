@@ -94,11 +94,12 @@ Part 1 の TypeScript 知識を前提に、React の全主要概念を実際の�
 | 3 | `react-app/vite.config.ts` | Vite（ビルドツール）の設定 |
 | 4 | `react-app/index.html` | SPA のベース HTML。`<div id="root">` がアプリのマウント先 |
 
-### Step 2: バックエンドを理解する
+### Step 2: バックエンドを理解する（Python / FastAPI）
 
 | # | ファイル | 学べること |
 |---|---------|-----------|
-| 5 | `react-app/server.ts` | **Express** による REST API サーバー。`GET` / `POST` / `PATCH` / `DELETE` の CRUD 操作、`cors` 設定、インメモリデータストア |
+| 5 | `react-app/server.py` | **FastAPI** による REST API サーバー。`GET` / `POST` / `PATCH` / `DELETE` の CRUD 操作、**Pydantic** によるバリデーション・スキーマ定義、**CORS** 設定、`HTTPException`、デコレータ (`@app.get` 等)、型ヒント (`Literal`, `Optional`)、インメモリデータストア |
+| - | `react-app/requirements.txt` | Python の依存パッケージ一覧（`fastapi`, `uvicorn`, `pydantic`） |
 
 ### Step 3: 共有型と API 通信を理解する
 
@@ -157,7 +158,7 @@ Part 1 の TypeScript 知識を前提に、React の全主要概念を実際の�
 2. **Part 2 で腕試し** ― `npm test` でテストを実行し、穴埋めを解く
 3. **Part 3 でスマホ復習** ― 通勤中などに `docs/index.html` で復習する
 4. **Part 4 を Step 順に読む** ― 各ファイルのコメントを一行ずつ追いながら React の仕組みを理解する
-5. **Part 4 のアプリを動かす** ― `cd react-app && npm run dev:server` と `npm run dev` で実際に操作して動きを確認する
+5. **Part 4 のアプリを動かす** ― バックエンド (`python server.py`) とフロントエンド (`npm run dev`) を起動して実際に操作して動きを確認する
 
 ---
 
@@ -173,12 +174,16 @@ npm test
 # コーディングテスト（特定の章だけ）
 npm test -- 1 5 9
 
-# React アプリ（開発サーバー）
+# React アプリ（バックエンド起動 ― ターミナル 1）
 cd react-app
-npm run dev:server   # バックエンド起動（ターミナル 1）
-npm run dev          # フロントエンド起動（ターミナル 2）
+pip install -r requirements.txt   # 初回のみ
+python server.py
 
-# React アプリ（ビルド）
+# React アプリ（フロントエンド起動 ― ターミナル 2）
+cd react-app
+npm run dev
+
+# React アプリ（フロントエンドビルド）
 cd react-app
 npm run build
 ```

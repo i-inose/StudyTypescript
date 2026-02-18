@@ -9,7 +9,7 @@ import type { Task, CreateTaskInput, ApiResponse } from "./types";
 
 // --------------------------------------------------
 // API のベース URL
-// 開発環境では Express サーバーが 3001 番で起動する
+// 開発環境では FastAPI サーバーが 3001 番で起動する
 // --------------------------------------------------
 const BASE_URL = "http://localhost:3001/api";
 
